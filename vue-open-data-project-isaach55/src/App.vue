@@ -10,7 +10,7 @@ import DataSet from './components/DataSet.vue'
 
     <div class="wrapper">
       <HelloWorld msg="You did it!" />
-
+      <DataSet />
       <nav>
         <RouterLink to="/">Home</RouterLink>
         <RouterLink to="/about">About</RouterLink>
