@@ -1,15 +1,14 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
 import DataSet from './components/DataSet.vue'
 </script>
 
 <template>
   <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
-
+    <form autocomplete="off">
+      <input type="text" id="filterInput" name="" placeholder="e.g." />
+    </form>
     <div class="wrapper">
-      <HelloWorld msg="You did it!" />
       <DataSet />
       <nav>
         <RouterLink to="/">Home</RouterLink>
