@@ -1,6 +1,7 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
 import DataSet from './components/DataSet.vue'
+import SearchBox from './components/SearchBox.vue'
 </script>
 
 <template>
@@ -10,6 +11,7 @@ import DataSet from './components/DataSet.vue'
     </form>
     <div class="wrapper">
       <DataSet />
+      <SearchBox />
       <nav>
         <RouterLink to="/">Home</RouterLink>
         <RouterLink to="/about">About</RouterLink>
