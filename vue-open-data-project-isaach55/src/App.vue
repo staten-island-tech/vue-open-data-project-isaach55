@@ -1,13 +1,12 @@
 <template>
     <div class="wrapper">
       <div class="left">
-      <SearchBox id="cuisineSearch" :cuisines="cuisineTypes"/>
-      <input type="text" placeholder="bronx, queens, etc"/>
-      <SearchBox :cuisines="['Bronx', 'Queens', 'Brooklyn']" />
-      //TMRW replace cuisines with more general term, make another prop for plaeholder
+      <SearchBox id="cuisineSearch" :data="cuisineTypes" :placeholderText="'What kind of food are you feeling'" :type="'cuisine'" @searchRestaurant="searchRestaurant"/>
+      <SearchBox id="boroughSearch" :data="['Bronx', 'Queens', 'Brooklyn', 'Manhattan', 'Staten Island']" :placeholderText="'Enter borough'" :type="'borough'" @searchRestaurant="searchRestaurant"/>
+      <p>showing results for:</p>
       <nav class="nav">
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
+        <RouterLink to="/">Restaurant Search</RouterLink>
+        <RouterLink to="/about">Charts</RouterLink>
       </nav>
       </div>
       <div class="right">
@@ -15,7 +14,6 @@
       <RouterView />
       </div>
     </div>
-
 </template>
 
 <script setup>
@@ -25,6 +23,8 @@ import DataSet from './components/DataSet.vue'
 import SearchBox from './components/SearchBox.vue'
 
 const cuisineTypes = ref([])
+const filters = ref('')
+const cuisineFilter = ref('')
 
 async function fetchCuisines() {
   const dataURL = `https://data.cityofnewyork.us/resource/43nn-pn8j.json?$select=distinct cuisine_description`
@@ -34,6 +34,17 @@ async function fetchCuisines() {
   console.log(cuisineTypes)
 }
 onMounted(fetchCuisines())
+
+function searchRestaurant(query, type) {
+  
+  if (type == "cuisine") {
+
+    console.log("this a cuinse fr")
+  }
+  else {
+    console.log("not")
+  }
+}
 
 </script>
 
@@ -60,6 +71,9 @@ onMounted(fetchCuisines())
 
 .nav {
   width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
 .header {

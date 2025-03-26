@@ -3,31 +3,40 @@
     <input 
       type="text" 
       v-model="searchQuery" 
-      placeholder="What kind of food are you feeling" 
+      :placeholder= "placeholderText"
     />
-    <ul v-if="filteredCuisines.length > 0">
-      <li v-for="(cuisine, index) in filteredCuisines" :key="index">
-        <button @click="selectCuisine(cuisine)">{{ cuisine }}</button>
+    <ul v-if="filteredData.length > 0">
+      <li v-for="(data, index) in filteredData" :key="index">
+        <button @click="selectQuery(data, type)">{{ data }}</button>
       </li>
     </ul>
   </div>
 </template>
 
 <script setup>
-import { watch, ref } from 'vue'
+import { watch, ref, defineEmits, defineProps } from 'vue'
 
-const props = defineProps({ cuisines: Array })
+const props = defineProps({ data: Array, placeholderText: String, type: String })
+const emit = defineEmits(['searchRestaurant'])
+
+function selectQuery(data, type) {
+  console.log(data)
+  console.log(type)
+  emit('searchRestaurant', data, type)
+  filteredData.value = []
+  searchQuery.value = ''
+}
 
 const searchQuery = ref("")
-const filteredCuisines = ref([])
+const filteredData = ref([])
 
 watch(searchQuery, (newQuery) => {
   if (newQuery) {
-    filteredCuisines.value = props.cuisines.filter(cuisine =>
-      cuisine.toLowerCase().includes(newQuery.toLowerCase())
+    filteredData.value = props.data.filter(data =>
+      data.toLowerCase().includes(newQuery.toLowerCase())
     )
   } else {
-    filteredCuisines.value = []
+    filteredData.value = []
   }
 })
 
@@ -38,7 +47,7 @@ watch(searchQuery, (newQuery) => {
 .searchBox {
   position: relative;
   width: 20vw;
-  max-height: 70%;
+  max-height: 50%;
 }
 
 input[type="text"] {
