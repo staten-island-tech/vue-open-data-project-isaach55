@@ -1,87 +1,75 @@
-<script setup>
-import { RouterLink, RouterView } from 'vue-router'
-import DataSet from './components/DataSet.vue'
-import SearchBox from './components/SearchBox.vue'
-</script>
-
 <template>
-  <header>
-    <form autocomplete="off">
-      <input type="text" id="filterInput" name="" placeholder="e.g." />
-    </form>
     <div class="wrapper">
-      <DataSet />
-      <SearchBox />
-      <nav>
+      <div class="left">
+      <SearchBox id="cuisineSearch" :cuisines="cuisineTypes"/>
+      <input type="text" placeholder="bronx, queens, etc"/>
+      <SearchBox :cuisines="['Bronx', 'Queens', 'Brooklyn']" />
+      //TMRW replace cuisines with more general term, make another prop for plaeholder
+      <nav class="nav">
         <RouterLink to="/">Home</RouterLink>
         <RouterLink to="/about">About</RouterLink>
       </nav>
+      </div>
+      <div class="right">
+      <h2 class="header">All of these restaurants have rats or mice in them</h2>
+      <RouterView />
+      </div>
     </div>
-  </header>
 
-  <RouterView />
 </template>
 
+<script setup>
+import { ref, onMounted } from 'vue'
+import { RouterLink, RouterView } from 'vue-router'
+import DataSet from './components/DataSet.vue'
+import SearchBox from './components/SearchBox.vue'
+
+const cuisineTypes = ref([])
+
+async function fetchCuisines() {
+  const dataURL = `https://data.cityofnewyork.us/resource/43nn-pn8j.json?$select=distinct cuisine_description`
+  let res = await fetch(dataURL)
+  let cuisineArray = await res.json()
+  cuisineTypes.value = cuisineArray.map(item => item.cuisine_description).filter(cuisine => cuisine)
+  console.log(cuisineTypes)
+}
+onMounted(fetchCuisines())
+
+</script>
+
 <style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
+
+.wrapper {
+  display: flex;
+  flex-direction: row;
+  height:100vh;
+  width:100vw;
 }
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
+.left {
+  display: flex;
+  flex-direction: column;
+  padding: 1vh 2vh;
 }
 
-nav {
+.right {
+  background-color: aqua;
   width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
+  padding: 1vh 0;
 }
 
-nav a.router-link-exact-active {
-  color: var(--color-text);
+.nav {
+  width: 100%;
 }
 
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
+.header {
+  padding: 0 1vw;
 }
 
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
+input[type="text"] {
+  width: 100%;
+  padding: 8px;
+  font-size: 16px;
 }
 
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
-}
 </style>

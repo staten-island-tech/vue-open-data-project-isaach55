@@ -19,9 +19,6 @@ async function getData() {
   let res = await fetch(dataURL)
   let data = await res.json()
   console.log(data)
-  //samantha rat core
-  //d3.js for maps?
-  //"autofilling" search bar
 }
 
 getData()

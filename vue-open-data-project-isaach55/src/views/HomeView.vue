@@ -1,6 +1,12 @@
 <script setup></script>
 
 <template>
-  <main></main>
+  <main>
+    <img class="img" src="/bigbacksquad.png" alt="the rats">
+  </main>
 </template>
-<style scoped></style>
+<style scoped>
+.img {
+  width: 100%;
+}
+</style>
