@@ -22,9 +22,9 @@ const emit = defineEmits(['searchRestaurant'])
 function selectQuery(data, type) {
   console.log(data)
   console.log(type)
-  emit('searchRestaurant', data, type)
   filteredData.value = []
   searchQuery.value = ''
+  emit('searchRestaurant', data, type)
 }
 
 const searchQuery = ref("")
@@ -47,7 +47,7 @@ watch(searchQuery, (newQuery) => {
 .searchBox {
   position: relative;
   width: 20vw;
-  max-height: 50%;
+  max-height: 40%;
 }
 
 input[type="text"] {
