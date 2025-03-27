@@ -27,7 +27,7 @@
       </nav>
     </div>
     <div class="right">
-      <h2 class="header">All of these restaurants have rats or mice in them</h2>
+      <h2 class="header">All of these restaurants have rats or mice in them. all of them</h2>
       <RouterView />
     </div>
   </div>
