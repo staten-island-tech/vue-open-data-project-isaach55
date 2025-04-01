@@ -16,7 +16,7 @@
         @searchRestaurant="searchRestaurant"
       />
       <div class="filterTextContainer">
-        <p id="showResultText">showing results for: </p>
+        <p id="showResultText">showing search results for: </p>
           <p class="filterTextBox">{{ cuisineFilter }}</p>
           <p class="filterTextBox">{{ boroughFilter }}</p>
       </div>
@@ -27,7 +27,7 @@
       </nav>
     </div>
     <div class="right">
-      <h2 class="header">All of these restaurants have rats or mice in them. all of them</h2>
+      <h2 class="header">All of these restaurants have rats or mice in them.</h2>
       <RouterView />
     </div>
   </div>
@@ -42,10 +42,13 @@ const cuisineTypes = ref([])
 const cuisineFilter = ref('')
 const boroughFilter = ref('')
 const filteredRestaurantArray = ref([])
+const ratRestaurantData = ref([])
+const ratDataURL = `https://data.cityofnewyork.us/resource/43nn-pn8j.json?$where=UPPER(cuisine_description) LIKE '%25${cuisineFilter.value.toUpperCase()}%25' AND (UPPER(violation_description) LIKE '%25RATS%25' OR UPPER(violation_description) LIKE '%25MICE%25')&$limit=200`
 
 provide('cuisineFilter', cuisineFilter)
 provide('boroughFilter', boroughFilter)
 provide('filteredRestaurantArray', filteredRestaurantArray)
+provide('ratRestaurantData', ratRestaurantData)
 
 function restoreDefault() {
   cuisineFilter.value = ''
@@ -60,9 +63,11 @@ async function fetchCuisines() {
   cuisineTypes.value = cuisineArray
     .map((item) => item.cuisine_description)
     .filter((cuisine) => cuisine)
-  console.log(cuisineTypes)
+  let res2 = await fetch(ratDataURL)
+  ratRestaurantData.value = await res2.json()
+  console.log("rat data: ", ratRestaurantData.value)
 }
-onMounted(fetchCuisines())
+onMounted(fetchCuisines)
 
 
 function searchRestaurant(query, type) {
@@ -77,10 +82,8 @@ function searchRestaurant(query, type) {
 
 async function fetchRestaurants() {
   let restaurantDataURL = ''
-  console.log("cuisine filter: ", cuisineFilter.value, "borough filter: ", boroughFilter.value)
   if (cuisineFilter.value && !boroughFilter.value) {
-    console.log("creates url")
-    restaurantDataURL = `https://data.cityofnewyork.us/resource/43nn-pn8j.json?$where=UPPER(cuisine_description) LIKE '%25${cuisineFilter.value.toUpperCase()}%25' AND (UPPER(violation_description) LIKE '%25RATS%25' OR UPPER(violation_description) LIKE '%25MICE%25')&$limit=200`
+    restaurantDataURL = ratDataURL
   }
   if (!cuisineFilter.value && boroughFilter.value) {
     restaurantDataURL = `https://data.cityofnewyork.us/resource/43nn-pn8j.json?$where=UPPER(boro) LIKE '%25${boroughFilter.value.toUpperCase()}%25' AND (UPPER(violation_description) LIKE '%25RATS%25' OR UPPER(violation_description) LIKE '%25MICE%25')&$limit=200`
@@ -88,10 +91,10 @@ async function fetchRestaurants() {
   if (cuisineFilter.value && boroughFilter.value) {
     restaurantDataURL = `https://data.cityofnewyork.us/resource/43nn-pn8j.json?$where=UPPER(cuisine_description) LIKE '%25${cuisineFilter.value.toUpperCase()}%25' AND UPPER(boro) LIKE '%25${boroughFilter.value.toUpperCase()}%25' AND (UPPER(violation_description) LIKE '%25RATS%25' OR UPPER(violation_description) LIKE '%25MICE%25')&$limit=200`
   }
-  console.log("used url: ", restaurantDataURL)
+  console.log("Fetching from:", restaurantDataURL);
   let res = await fetch(restaurantDataURL)
   filteredRestaurantArray.value = await res.json()
-  console.log(filteredRestaurantArray)
+  console.log("Fetching from:", ratDataURL);
 }
 
 </script>
