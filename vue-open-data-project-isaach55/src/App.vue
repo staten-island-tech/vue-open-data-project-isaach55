@@ -83,7 +83,7 @@ function searchRestaurant(query, type) {
 async function fetchRestaurants() {
   let restaurantDataURL = ''
   if (cuisineFilter.value && !boroughFilter.value) {
-    restaurantDataURL = ratDataURL
+    restaurantDataURL = `https://data.cityofnewyork.us/resource/43nn-pn8j.json?$where=UPPER(cuisine_description) LIKE '%25${cuisineFilter.value.toUpperCase()}%25' AND (UPPER(violation_description) LIKE '%25RATS%25' OR UPPER(violation_description) LIKE '%25MICE%25')&$limit=200`
   }
   if (!cuisineFilter.value && boroughFilter.value) {
     restaurantDataURL = `https://data.cityofnewyork.us/resource/43nn-pn8j.json?$where=UPPER(boro) LIKE '%25${boroughFilter.value.toUpperCase()}%25' AND (UPPER(violation_description) LIKE '%25RATS%25' OR UPPER(violation_description) LIKE '%25MICE%25')&$limit=200`
